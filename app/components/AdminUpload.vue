@@ -218,7 +218,7 @@ function closeFile(id: number) {
 </script>
 
 <template>
-  <div class="mx-auto mb-20 flex flex-col gap-4 p-4 container">
+  <div class="container mx-auto mb-20 flex flex-col gap-4 p-4">
     <UploadConfig :disabled="files.length > 0" />
 
     <FileUpload

@@ -1,4 +1,5 @@
 import type { SerializeObject } from 'nitropack'
+import type { APIDataPhoto } from './types'
 
 /**
  * Format bytes as human-readable text.
@@ -69,12 +70,12 @@ export async function getCompressedImageBase64(file: File, compress: boolean): P
   })
 }
 
-export function deserializePhoto(p: SerializeObject<Photo>): IPhoto {
-  return ({
-    ...Object.fromEntries(Object.entries(p).map(([key, value]) => [key, value ?? undefined])) as IPhoto,
+export function deserializePhoto(p: SerializeObject<APIDataPhoto>): IPhoto {
+  return {
+    ...(Object.fromEntries(Object.entries(p).map(([key, value]) => [key, value ?? undefined])) as unknown as IPhoto),
     fileModified: p.fileModified ? new Date(p.fileModified) : undefined,
     takenAt: p.takenAt ? new Date(p.takenAt) : undefined,
     createdAt: p.createdAt ? new Date(p.createdAt) : undefined,
     updatedAt: p.updatedAt ? new Date(p.updatedAt) : undefined,
-  })
+  } as IPhoto
 }

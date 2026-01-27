@@ -1,25 +1,24 @@
 import { desc, sql } from 'drizzle-orm'
 
 export default eventHandler(async (event) => {
-  const db = useDB()
   const query = getQuery(event)
   const { limit, offset } = query
 
   const tags = await db
     .select({
-      id: tables.tag.id,
-      name: tables.tag.name,
-      createdAt: tables.tag.createdAt,
-      photoCount: tables.tag.photoCount,
+      id: schema.tag.id,
+      name: schema.tag.name,
+      createdAt: schema.tag.createdAt,
+      photoCount: schema.tag.photoCount,
     })
-    .from(tables.tag)
-    .orderBy(desc(tables.tag.photoCount))
+    .from(schema.tag)
+    .orderBy(desc(schema.tag.photoCount))
     .limit(limit ? Number(limit) : 9999999)
     .offset(offset ? Number(offset) : 0)
 
   const total = await db
     .select({ count: sql<number>`count(*)` })
-    .from(tables.tag)
+    .from(schema.tag)
     .get()
 
   return {

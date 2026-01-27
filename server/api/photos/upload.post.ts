@@ -1,3 +1,6 @@
+import type { Photo } from '~~/server/utils/drizzle'
+import { blob } from 'hub:blob'
+
 interface UploadFile {
   file: File
   type: 'jpeg' | 'webp' | 'avif' | 'thumbnail'
@@ -6,7 +9,6 @@ interface UploadFile {
 export default eventHandler(async (event) => {
   await requireUserSession(event)
 
-  const db = useDB()
   const formData = await readFormData(event)
   const files: UploadFile[] = []
 
@@ -56,7 +58,7 @@ export default eventHandler(async (event) => {
         const extension = filename.substring(filename.lastIndexOf('.'))
         const pathname = `Image-${uploadId}-${file.type}${extension}`
 
-        await hubBlob().put(pathname, file.file)
+        await blob.put(pathname, file.file)
 
         return {
           success: true,
@@ -115,7 +117,7 @@ export default eventHandler(async (event) => {
     }
 
     try {
-      const newPhoto = await db.insert(tables.photo)
+      const newPhoto = await db.insert(schema.photo)
         .values({
           ...photoEntry,
           fileName,
@@ -143,7 +145,7 @@ export default eventHandler(async (event) => {
       .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
       .map(result => ({ fileName: 'Unknown', error: result.reason })),
     ...uploadResults
-      .filter((result): result is PromiseFulfilledResult<{ success: false, fileName: string, error: any }> =>
+      .filter((result): result is PromiseFulfilledResult<{ success: false, fileName: string, error: unknown }> =>
         result.status === 'fulfilled' && !result.value.success)
       .map(result => ({ fileName: result.value.fileName, error: result.value.error })),
   ]

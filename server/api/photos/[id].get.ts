@@ -10,9 +10,8 @@ export default eventHandler(async (event) => {
     })
   }
 
-  const db = useDB()
   const photo = await db.query.photo.findFirst({
-    where: eq(tables.photo.id, id),
+    where: eq(schema.photo.id, id),
   })
 
   if (!photo) {

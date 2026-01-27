@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "exif-gallery",
+  "main": "./.output/server/index.mjs",
+  "compatibility_date": "2026-01-26",
+  "assets": {
+    "directory": "./.output/public/",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "r2_buckets": [
+    {
+      "binding": "BLOB",
+      "bucket_name": "exif-gallery-nuxt"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "7c2d4751-a7fd-4721-b85a-2302d5418670"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import type { BlobObject } from '@nuxthub/core'
+import type { BlobObject } from '@nuxthub/core/blob'
 
 export interface FilePlugin {
   getImages: () => Promise<void>

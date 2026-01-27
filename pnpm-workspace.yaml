@@ -1,0 +1,14 @@
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - sharp
+  - unrs-resolver
+  - vue-demi
+  - workerd
+
+onlyBuiltDependencies:
+  - esbuild
+  - simple-git-hooks

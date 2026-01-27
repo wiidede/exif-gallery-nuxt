@@ -5,7 +5,7 @@ export default antfu({
   unocss: true,
   // formatters: true,
   ignores: [
-    'server/database/migrations/*',
+    'server/db/migrations/*',
   ],
   overrides: {
     typescript: {

@@ -1,7 +1,6 @@
 import { and, eq, sql } from 'drizzle-orm'
 
 export default eventHandler(async (event) => {
-  const db = useDB()
   const query = getQuery(event)
   const {
     hidden,
@@ -18,7 +17,7 @@ export default eventHandler(async (event) => {
   const conditions = []
 
   if (hidden !== undefined)
-    conditions.push(eq(tables.photo.hidden, hidden === 'true'))
+    conditions.push(eq(schema.photo.hidden, hidden === 'true'))
 
   // 使用子查询而不是多次查询
   let photoIdsSubquery = null
@@ -38,7 +37,7 @@ export default eventHandler(async (event) => {
   // 如果有标签过滤但没有匹配的标签，直接返回空结果
   if (tag) {
     const tagExists = await db.query.tag.findFirst({
-      where: eq(tables.tag.name, String(tag)),
+      where: eq(schema.tag.name, String(tag)),
     })
 
     if (!tagExists) {
@@ -56,7 +55,7 @@ export default eventHandler(async (event) => {
   if (photoIdsSubquery) {
     // 使用 SQL 子查询来过滤照片
     const countResult = await db.select({ count: sql<number>`count(*)` })
-      .from(tables.photo)
+      .from(schema.photo)
       .where(
         and(
           conditions.length > 0 ? and(...conditions) : undefined,
@@ -83,13 +82,13 @@ export default eventHandler(async (event) => {
       ),
       limit: limitNum,
       offset: offsetNum,
-      orderBy: (col => order === 'desc' ? sql`${col} DESC` : sql`${col} ASC`)(tables.photo[orderBy as keyof typeof tables.photo]),
+      orderBy: (col => order === 'desc' ? sql`${col} DESC` : sql`${col} ASC`)(schema.photo[orderBy as keyof typeof schema.photo]),
     })
   }
   else {
     // 没有标签过滤时的查询
     const countResult = await db.select({ count: sql<number>`count(*)` })
-      .from(tables.photo)
+      .from(schema.photo)
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .get()
 
@@ -99,7 +98,7 @@ export default eventHandler(async (event) => {
       where: conditions.length > 0 ? and(...conditions) : undefined,
       limit: limitNum,
       offset: offsetNum,
-      orderBy: (col => order === 'desc' ? sql`${col} DESC` : sql`${col} ASC`)(tables.photo[orderBy as keyof typeof tables.photo]),
+      orderBy: (col => order === 'desc' ? sql`${col} DESC` : sql`${col} ASC`)(schema.photo[orderBy as keyof typeof schema.photo]),
     })
   }
 

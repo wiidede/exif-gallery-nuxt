@@ -1,6 +1,5 @@
 import type { DBType } from './drizzle'
 import { eq, inArray, sql } from 'drizzle-orm'
-import { tables } from './drizzle'
 
 export async function processPhotoTags(db: DBType, photoId: string, tags: string | null | undefined) {
   if (tags === undefined || tags === null)
@@ -13,7 +12,7 @@ export async function processPhotoTags(db: DBType, photoId: string, tags: string
 
   // Get current photo tags for decrementing counts
   const currentPhotoTags = await db.query.photoTag.findMany({
-    where: eq(tables.photoTag.photoId, photoId),
+    where: eq(schema.photoTag.photoId, photoId),
   })
 
   // Get the tag IDs that need to be decremented
@@ -21,7 +20,7 @@ export async function processPhotoTags(db: DBType, photoId: string, tags: string
 
   // First, find all existing tags in one query
   const existingTags = await db.query.tag.findMany({
-    where: inArray(tables.tag.name, tagNames),
+    where: inArray(schema.tag.name, tagNames),
   })
 
   // Create a map of tag names to their IDs for quick lookup
@@ -37,7 +36,7 @@ export async function processPhotoTags(db: DBType, photoId: string, tags: string
 
   // Insert new tags if any
   if (newTagOperations.length > 0) {
-    const newTags = await db.insert(tables.tag)
+    const newTags = await db.insert(schema.tag)
       .values(newTagOperations)
       .returning()
 
@@ -55,28 +54,28 @@ export async function processPhotoTags(db: DBType, photoId: string, tags: string
   // Execute operations sequentially for better reliability
   // 1. Delete existing photo-tag relationships
   if (currentPhotoTags.length > 0) {
-    await db.delete(tables.photoTag)
-      .where(eq(tables.photoTag.photoId, photoId))
+    await db.delete(schema.photoTag)
+      .where(eq(schema.photoTag.photoId, photoId))
   }
 
   // 2. Decrement counts for removed tags
   if (removedTagIds.length > 0) {
-    await db.update(tables.tag)
-      .set({ photoCount: sql`${tables.tag.photoCount} - 1` })
-      .where(inArray(tables.tag.id, removedTagIds))
+    await db.update(schema.tag)
+      .set({ photoCount: sql`${schema.tag.photoCount} - 1` })
+      .where(inArray(schema.tag.id, removedTagIds))
   }
 
   // 3. Create new photo-tag relationships one by one to avoid conflicts
   for (const tagId of allTagIds) {
-    await db.insert(tables.photoTag)
+    await db.insert(schema.photoTag)
       .values({ photoId, tagId })
       .onConflictDoNothing()
   }
 
   // 4. Increment counts for added tags
   if (addedTagIds.length > 0) {
-    await db.update(tables.tag)
-      .set({ photoCount: sql`${tables.tag.photoCount} + 1` })
-      .where(inArray(tables.tag.id, addedTagIds))
+    await db.update(schema.tag)
+      .set({ photoCount: sql`${schema.tag.photoCount} + 1` })
+      .where(inArray(schema.tag.id, addedTagIds))
   }
 }

@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-07-30',
+  compatibilityDate: '2026-01-26',
   future: { compatibilityVersion: 4 },
   modules: [
     '@nuxthub/core',
@@ -13,8 +13,21 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
   ],
   hub: {
-    blob: true,
-    database: true,
+    blob: {
+      driver: 'cloudflare-r2',
+      binding: 'BLOB',
+    },
+    db: {
+      dialect: 'sqlite',
+      driver: 'd1',
+    },
+  },
+  nitro: {
+    preset: 'cloudflare_module',
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true,
+    },
   },
   components: [
     {
@@ -55,9 +68,6 @@ export default defineNuxtConfig({
       { code: 'zh', iso: 'zh-CN', file: 'zh.yml' },
     ],
     defaultLocale: 'en',
-    bundle: {
-      optimizeTranslationDirective: false,
-    },
   },
   devtools: { enabled: true },
   eslint: {

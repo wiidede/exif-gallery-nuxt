@@ -15,7 +15,9 @@ interface Webp {
 
 interface Avif {
   target: 'avif'
-  encodeOptions?: Partial<AvifOption>
+  encodeOptions?: Partial<AvifOption> & {
+    bitDepth?: 8
+  }
 }
 
 interface Thumbnail {

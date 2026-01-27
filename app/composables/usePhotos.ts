@@ -4,11 +4,11 @@ export function usePhotosInfinite(params?: {
   order?: string
   tag?: string
 }, limit = 12): {
-    photos: Ref<IPhoto[]>
-    hasMore: Ref<boolean>
-    loadMore: () => Promise<void>
-    loading: Ref<boolean>
-  } {
+  photos: Ref<IPhoto[]>
+  hasMore: Ref<boolean>
+  loadMore: () => Promise<void>
+  loading: Ref<boolean>
+} {
   const pStore = usePhotosStore()
   const photosStore = pStore.photosStore
   const key = JSON.stringify(params)

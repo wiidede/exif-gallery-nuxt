@@ -8,20 +8,20 @@ globalThis.onmessage = async (e) => {
 
   try {
     const arrayBuffer = await file.arrayBuffer()
-    let imageData: Awaited<ReturnType<typeof decodeJpeg>> | undefined
+    let imageData: ImageData | undefined
     const fileType = file.type
 
     if (fileType === 'image/jpeg' || fileType === 'image/jpg') {
-      imageData = await decodeJpeg(arrayBuffer, { preserveOrientation: true })
+      imageData = await decodeJpeg(arrayBuffer, { preserveOrientation: true }) ?? undefined
     }
     else if (fileType === 'image/png') {
-      imageData = await decodePng(arrayBuffer)
+      imageData = await decodePng(arrayBuffer) ?? undefined
     }
     else if (fileType === 'image/webp') {
-      imageData = await decodeWebp(arrayBuffer)
+      imageData = await decodeWebp(arrayBuffer) ?? undefined
     }
     else if (fileType === 'image/avif') {
-      imageData = await decodeAvif(arrayBuffer)
+      imageData = await decodeAvif(arrayBuffer) ?? undefined
     }
 
     if (!imageData) {

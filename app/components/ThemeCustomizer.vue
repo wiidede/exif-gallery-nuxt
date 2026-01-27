@@ -115,7 +115,7 @@ const languageValues = [
             v-model="disable3DCard"
           />
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 </template>

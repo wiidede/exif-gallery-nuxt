@@ -1,4 +1,5 @@
 import { eq, inArray, sql } from 'drizzle-orm'
+import { blob } from 'hub:blob'
 
 export default eventHandler(async (event) => {
   await requireUserSession(event)
@@ -10,8 +11,6 @@ export default eventHandler(async (event) => {
       statusMessage: 'id is required',
     })
   }
-
-  const db = useDB()
 
   // Get the photo record first
   const photo = await db.query.photo.findFirst({
@@ -31,7 +30,7 @@ export default eventHandler(async (event) => {
     const pathname = photo[format]
     if (pathname) {
       try {
-        await hubBlob().delete(pathname)
+        await blob.delete(pathname)
       }
       catch (error) {
         console.error(`Failed to delete ${format} file (${pathname}):`, error)
@@ -43,21 +42,21 @@ export default eventHandler(async (event) => {
 
   try {
     const currentPhotoTags = await db.query.photoTag.findMany({
-      where: eq(tables.photoTag.photoId, id),
+      where: eq(schema.photoTag.photoId, id),
     })
 
-    await db.delete(tables.photo).where(eq(tables.photo.id, id))
+    await db.delete(schema.photo).where(eq(schema.photo.id, id))
 
     if (currentPhotoTags.length > 0) {
-      await db.delete(tables.photoTag)
-        .where(eq(tables.photoTag.photoId, id))
+      await db.delete(schema.photoTag)
+        .where(eq(schema.photoTag.photoId, id))
 
-      await db.update(tables.tag)
-        .set({ photoCount: sql`${tables.tag.photoCount} - 1` })
-        .where(inArray(tables.tag.id, currentPhotoTags.map(pt => pt.tagId)))
+      await db.update(schema.tag)
+        .set({ photoCount: sql`${schema.tag.photoCount} - 1` })
+        .where(inArray(schema.tag.id, currentPhotoTags.map(pt => pt.tagId)))
 
-      await db.delete(tables.tag)
-        .where(eq(tables.tag.photoCount, 0))
+      await db.delete(schema.tag)
+        .where(eq(schema.tag.photoCount, 0))
     }
   }
   catch (error) {

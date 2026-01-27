@@ -33,7 +33,7 @@ globalThis.onmessage = async (e) => {
       })
     }
     else if (options.target === 'avif') {
-      const avifData = await encodeAvif(imageData, options.encodeOptions)
+      const avifData = options.encodeOptions ? await encodeAvif(imageData, options.encodeOptions) : await encodeAvif(imageData)
       result = new File([avifData], changeFileExtension(filename, 'avif'), {
         type: 'image/avif',
       })

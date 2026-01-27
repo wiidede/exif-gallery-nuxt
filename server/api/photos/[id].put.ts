@@ -7,8 +7,6 @@ export default defineEventHandler(async (event) => {
     id: z.string().min(1, 'id is required'),
   }))
 
-  const db = useDB()
-
   const updatableFields = z.object({
     title: z.string().optional(),
     caption: z.string().optional(),
@@ -35,14 +33,12 @@ export default defineEventHandler(async (event) => {
   const body = await useValidatedBody(event, updatableFields)
 
   try {
-    const photo = tables.photo
-
-    const updatedPhoto = await db.update(photo)
+    const updatedPhoto = await db.update(schema.photo)
       .set({
         ...body,
         takenAt: body.takenAt ? new Date(body.takenAt) : undefined,
       })
-      .where(eq(photo.id, id))
+      .where(eq(schema.photo.id, id))
       .returning()
 
     if (!updatedPhoto.length)

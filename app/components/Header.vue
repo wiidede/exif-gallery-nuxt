@@ -23,7 +23,7 @@ async function clearSession() {
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 h-12 w-full flex items-center justify-between border-b bg-background/60 px-4 backdrop-blur border-grid">
+  <header class="sticky top-0 z-50 h-12 w-full flex items-center justify-between border-b border-grid bg-background/60 px-4 backdrop-blur">
     <nav div class="min-w-0 flex flex-auto items-center justify-items-start">
       <NuxtLinkLocale to="/" class="me-2 min-w-0 flex-[0_1_auto] truncate font-medium">
         <Logo class="size-6 text-primary op-80" />
