@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm'
 import { index, integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { createCuid } from '../utils/utils'
 
 export const photo = sqliteTable('photos', {
   id: text('id').primaryKey().$defaultFn(() => createCuid(8)),

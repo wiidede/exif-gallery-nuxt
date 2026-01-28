@@ -47,11 +47,36 @@ compression_config:
 ai_config:
   title: AI Features
   enable: Enable AI feature extraction
+  providers: AI Providers
   provider: AI Provider
   secret_key: Secret Key
   secret_key_placeholder: Please enter API key
   base_url: API URL
   base_url_placeholder: Enter API URL, leave empty for default
+  model: Model
+  model_placeholder: Enter model name
+  add_provider: Add Provider
+  add_provider_desc: Add a new AI provider configuration
+  provider_name: Provider Name
+  provider_name_placeholder: e.g. OpenAI, Anthropic, Claude
+  provider_type: Provider Type
+  edit_provider: Edit Provider
+  edit_provider_desc: Edit existing AI provider configuration
+  edit: Edit
+  delete: Delete
+  cancel: Cancel
+  save: Save
+  selected: Selected
+  fetch_models: Fetch Models
+  recommended_models: Recommended Models
+  test_connection: Test Connection
+  connection_success: Connection successful
+  connection_failed: Connection failed
+  cancel_edit: Cancel Edit
+  add: Add
+  available_models: Available Models
+  use_custom_model: 'Use custom model: "{model}"'
+  search_to_add_custom_model: Type in search box to add custom model
 file_upload:
   title: Upload file
   description: Drag or drop your files here or click to upload

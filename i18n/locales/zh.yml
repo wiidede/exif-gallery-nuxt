@@ -47,11 +47,36 @@ compression_config:
 ai_config:
   title: AI 功能
   enable: 启用 AI 特征提取
+  providers: AI 服务商
   provider: AI 服务商
   secret_key: 密钥
   secret_key_placeholder: 请输入 API 密钥
   base_url: API 地址
   base_url_placeholder: 请输入 API 地址，空则使用默认地址
+  model: 模型
+  model_placeholder: 请输入模型名称
+  add_provider: 添加服务商
+  add_provider_desc: 添加一个新的 AI 服务商配置
+  provider_name: 服务商名称
+  provider_name_placeholder: 例如：OpenAI, Anthropic, Claude
+  provider_type: 服务商类型
+  edit_provider: 编辑服务商
+  edit_provider_desc: 编辑现有的 AI 服务商配置
+  edit: 编辑
+  delete: 删除
+  cancel: 取消
+  save: 保存
+  selected: 已选中
+  fetch_models: 获取模型列表
+  recommended_models: 推荐模型
+  test_connection: 测试连接
+  connection_success: 连接成功
+  connection_failed: 连接失败
+  cancel_edit: 取消编辑
+  add: 添加
+  available_models: 可用模型
+  use_custom_model: 使用自定义模型："{model}"
+  search_to_add_custom_model: 在搜索框输入添加自定义模型
 file_upload:
   title: 上传文件
   description: 拖拽或点击此处上传文件

@@ -1,10 +1,52 @@
 <script setup lang="ts">
+import type { AIProviderConfig } from '../composables/useAIConfig'
+import { formatModelName } from '../utils/aiProviders'
+
 defineProps<{
   disabled?: boolean
 }>()
 
 const { config: uploadConfig } = useUploadConfig()
-const { config: aiConfig, providers } = useAIConfig()
+const { config: aiConfig, selectedProvider, addProvider, updateProvider, removeProvider, setSelectedProvider } = useAIConfig()
+
+// AI 供应商管理状态
+const showProviderDialog = ref(false)
+const editingProvider = ref<AIProviderConfig | null>(null)
+
+// 打开添加供应商对话框
+function openAddProviderDialog() {
+  editingProvider.value = null
+  showProviderDialog.value = true
+}
+
+// 打开编辑供应商对话框
+function openEditProviderDialog(provider: AIProviderConfig) {
+  editingProvider.value = provider
+  showProviderDialog.value = true
+}
+
+// 保存供应商
+function handleSaveProvider(providerData: Omit<AIProviderConfig, 'id' | 'createdAt'>) {
+  if (editingProvider.value) {
+    // 更新现有供应商
+    updateProvider(editingProvider.value.id, providerData)
+  }
+  else {
+    // 添加新供应商
+    addProvider(providerData)
+  }
+  editingProvider.value = null
+}
+
+// 切换供应商状态
+function toggleProviderEnabled(provider: AIProviderConfig) {
+  updateProvider(provider.id, { enabled: !provider.enabled })
+}
+
+// 选择供应商
+function selectProvider(providerId: string) {
+  setSelectedProvider(providerId)
+}
 </script>
 
 <template>
@@ -90,8 +132,11 @@ const { config: aiConfig, providers } = useAIConfig()
       <template #status>
         <ItemStatus :label="$t('ai_config.title')" :checked="aiConfig.enabled">
           <span>{{ $t('ai_config.title') }}</span>
-          <Badge v-if="aiConfig.enabled" variant="outline" class="ml-2 rounded-lg">
-            {{ aiConfig.provider }}
+          <Badge v-if="aiConfig.enabled && selectedProvider" variant="outline" class="ml-2 rounded-lg">
+            {{ selectedProvider.name }}
+          </Badge>
+          <Badge v-if="aiConfig.enabled && selectedProvider?.model" variant="outline" class="ml-1 rounded-lg">
+            {{ formatModelName(selectedProvider.model) }}
           </Badge>
         </ItemStatus>
       </template>
@@ -105,42 +150,71 @@ const { config: aiConfig, providers } = useAIConfig()
             <Label for="enable-ai">{{ $t('ai_config.enable') }}</Label>
           </div>
           <CollapsibleContent>
-            <div class="ml-6 space-y-2">
+            <div class="ml-6 space-y-4">
+              <!-- 供应商列表 -->
               <div>
-                <Label for="ai-provider">{{ $t('ai_config.provider') }}</Label>
-                <Select id="ai-provider" v-model="aiConfig.provider">
-                  <SelectTrigger class="h-8 py-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem
-                      v-for="provider in providers"
-                      :key="provider.value"
-                      :value="provider.value"
-                    >
-                      {{ provider.label }}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label for="secret-key">{{ $t('ai_config.secret_key') }}</Label>
-                <Input
-                  id="secret-key"
-                  v-model="aiConfig.secretKey"
-                  type="password"
-                  class="h-8 py-1"
-                  :placeholder="$t('ai_config.secret_key_placeholder')"
-                />
-              </div>
-              <div>
-                <Label for="base-url">{{ $t('ai_config.base_url') }}</Label>
-                <Input
-                  id="base-url"
-                  v-model="aiConfig.baseUrl"
-                  class="h-8 py-1"
-                  :placeholder="$t('ai_config.base_url_placeholder')"
-                />
+                <div class="mb-2 flex items-center justify-between">
+                  <Label>{{ $t('ai_config.providers') }}</Label>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    class="h-7 text-xs"
+                    @click="openAddProviderDialog"
+                  >
+                    <div class="i-lucide-plus mr-1" />
+                    {{ $t('ai_config.add_provider') }}
+                  </Button>
+                </div>
+                <div class="space-y-2">
+                  <div
+                    v-for="provider in Object.values(aiConfig.providers)"
+                    :key="provider.id"
+                    class="flex items-center justify-between border rounded-lg p-2 transition-colors hover:bg-muted/50"
+                    :class="{ 'border-primary bg-primary/5': aiConfig.selectedProviderId === provider.id }"
+                  >
+                    <div class="min-w-0 flex flex-1 items-center space-x-2">
+                      <Checkbox
+                        :model-value="provider.enabled"
+                        @update:model-value="toggleProviderEnabled(provider)"
+                      />
+                      <div
+                        class="min-w-0 flex-1 cursor-pointer"
+                        @click="selectProvider(provider.id)"
+                      >
+                        <div class="truncate text-sm font-medium">
+                          {{ provider.name }}
+                        </div>
+                        <div class="truncate text-xs text-muted-foreground">
+                          {{ provider.type }}
+                          <span v-if="provider.model" class="ml-1">• {{ formatModelName(provider.model) }}</span>
+                        </div>
+                      </div>
+                      <Badge
+                        v-if="provider.id === aiConfig.selectedProviderId"
+                        variant="secondary"
+                        class="text-xs"
+                      >
+                        {{ $t('ai_config.selected') }}
+                      </Badge>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                      <TooltipIconButton
+                        icon="i-lucide-pencil"
+                        :label="$t('ai_config.edit')"
+                        size="sm"
+                        @click="openEditProviderDialog(provider)"
+                      />
+                      <TooltipIconButton
+                        v-if="provider.id !== 'openai' && provider.id !== 'gemini'"
+                        icon="i-lucide-trash-2"
+                        :label="$t('ai_config.delete')"
+                        size="sm"
+                        variant="destructive"
+                        @click="removeProvider(provider.id)"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </CollapsibleContent>
@@ -148,4 +222,12 @@ const { config: aiConfig, providers } = useAIConfig()
       </template>
     </UploadConfigCard>
   </div>
+
+  <!-- 供应商编辑对话框 -->
+  <ProviderEditDialog
+    :provider="editingProvider ?? undefined"
+    :open="showProviderDialog"
+    @update:open="showProviderDialog = $event"
+    @save="handleSaveProvider"
+  />
 </template>

@@ -49,6 +49,7 @@ export default defineNuxtConfig({
   },
   css: [
     '@unocss/reset/tailwind.css',
+    'vue-sonner/style.css',
   ],
   colorMode: {
     classSuffix: '',

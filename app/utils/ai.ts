@@ -1,8 +1,7 @@
-import { createGoogleGenerativeAI } from '@ai-sdk/google'
-import { createOpenAI } from '@ai-sdk/openai'
 import { generateObject } from 'ai'
 import { z } from 'zod'
 import { useAIConfig } from '../composables/useAIConfig'
+import { createAIClient } from './aiProviders'
 
 // Helper function to remove base64 prefix
 function removeBase64Prefix(base64: string) {
@@ -14,38 +13,38 @@ function cleanUpAiTextResponse(text: string) {
   return text.trim().replace(/[\n\r]+/g, ' ')
 }
 
-// Initialize AI client based on provider
+/**
+ * 初始化 AI 客户端
+ * 使用当前选中的供应商配置
+ */
 function initializeAIClient() {
-  const { config } = useAIConfig()
+  const { config, selectedProvider } = useAIConfig()
 
   if (!config.value.enabled) {
     console.error('[DEV] AI is disabled. Please enable it in the settings.')
     return null
   }
 
-  if (!config.value.secretKey) {
+  if (!selectedProvider.value) {
+    console.error('[DEV] No provider selected. Please select a provider in the settings.')
+    return null
+  }
+
+  if (!selectedProvider.value.apiKey) {
     throw new Error('AI secret key is missing. Please provide it in the settings.')
   }
 
-  if (config.value.provider === 'openai') {
-    return createOpenAI({
-      baseURL: config.value.baseUrl || undefined,
-      apiKey: config.value.secretKey,
-    })
-  }
-  else if (config.value.provider === 'gemini') {
-    return createGoogleGenerativeAI({
-      baseURL: config.value.baseUrl || undefined,
-      apiKey: config.value.secretKey,
-    })
-  }
-
-  return null
+  return createAIClient(selectedProvider.value)
 }
 
+/**
+ * 获取 AI 图片分析
+ * @param imageFile 图片文件
+ * @param compress 是否压缩图片
+ * @returns 图片分析结果
+ */
 export async function getAiImageAnalysis(imageFile: File, compress = true) {
-  const client = initializeAIClient()
-  const { config } = useAIConfig()
+  const model = initializeAIClient()
   const { t } = useNuxtApp().$i18n
 
   const imageAnalysisSchema = z.object({
@@ -63,7 +62,7 @@ export async function getAiImageAnalysis(imageFile: File, compress = true) {
     + `- ${t('ai.tags')}\n`
     + `- ${t('ai.semantic')}`
 
-  if (!client) {
+  if (!model) {
     return {
       title: '',
       caption: '',
@@ -75,7 +74,7 @@ export async function getAiImageAnalysis(imageFile: File, compress = true) {
   try {
     const base64 = await getCompressedImageBase64(imageFile, compress)
     const { object } = await generateObject({
-      model: client(config.value.provider === 'openai' ? 'gpt-4o' : 'gemini-2.0-flash'),
+      model,
       schema: imageAnalysisSchema,
       messages: [{
         role: 'user',
