@@ -70,8 +70,6 @@ ai_config:
   save: 保存
   selected: 已选中
   fetch_models: 获取模型列表
-  recommended_models: 推荐模型
-  test_connection: 测试连接
   connection_success: 连接成功
   connection_failed: 连接失败
   cancel_edit: 取消编辑
@@ -79,6 +77,7 @@ ai_config:
   available_models: 可用模型
   use_custom_model: 使用自定义模型："{model}"
   search_to_add_custom_model: 在搜索框输入添加自定义模型
+  models: 个模型
 file_upload:
   title: 上传文件
   description: 拖拽或点击此处上传文件

@@ -1,5 +1,5 @@
 import type { LanguageModelV3 } from '@ai-sdk/provider'
-import type { AIProviderConfig, ProviderType } from '../composables/useAIConfig'
+import type { AIProviderConfig } from '../composables/useAIConfig'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createOpenAI } from '@ai-sdk/openai'
 
@@ -175,30 +175,6 @@ export async function testProviderConnection(
   catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return { success: false, error: errorMessage }
-  }
-}
-
-/**
- * 获取供应商类型的推荐模型列表
- */
-export function getRecommendedModels(type: ProviderType): string[] {
-  switch (type) {
-    case 'openai':
-      return [
-        'gpt-4o',
-        'gpt-4o-mini',
-        'gpt-4-turbo',
-        'gpt-3.5-turbo',
-      ]
-    case 'gemini':
-      return [
-        'gemini-2.0-flash',
-        'gemini-2.0-flash-exp',
-        'gemini-1.5-pro',
-        'gemini-1.5-flash',
-      ]
-    default:
-      return []
   }
 }
 

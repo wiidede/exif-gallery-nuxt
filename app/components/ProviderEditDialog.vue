@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { AIProviderConfig, ProviderType } from '../composables/useAIConfig'
-import { fetchModels, getRecommendedModels, testProviderConnection } from '../utils/aiProviders'
+import { fetchModels } from '../utils/aiProviders'
 
 interface Props {
   provider?: AIProviderConfig
@@ -28,8 +28,7 @@ const baseUrl = ref(props.provider?.baseURL || getDefaultBaseUrl(type.value))
 const model = ref(props.provider?.model || '')
 const availableModels = ref<string[]>([])
 const isLoadingModels = ref(false)
-const isTestingConnection = ref(false)
-const testConnectionResult = ref<{ success: boolean, error?: string } | null>(null)
+const testConnectionResult = ref<{ success: boolean, error?: string, modelCount?: number } | null>(null)
 
 // 监听类型变化，自动更新默认 baseURL
 watch(type, (newType) => {
@@ -89,11 +88,12 @@ async function fetchModelsList() {
       model.value = availableModels.value[0]!
     }
 
-    // 显示成功提示
+    // 显示成功提示，包含模型数量
     if (availableModels.value.length > 0) {
       testConnectionResult.value = {
         success: true,
         error: undefined,
+        modelCount: availableModels.value.length,
       }
     }
     else {
@@ -113,51 +113,6 @@ async function fetchModelsList() {
   finally {
     isLoadingModels.value = false
   }
-}
-
-// 测试连接
-async function testConnection() {
-  if (!apiKey.value) {
-    return
-  }
-
-  // Gemini 不需要 base URL，但 OpenAI 需要
-  if (type.value === 'openai' && !baseUrl.value) {
-    return
-  }
-
-  isTestingConnection.value = true
-  testConnectionResult.value = null
-  try {
-    const tempConfig: AIProviderConfig = {
-      id: 'temp',
-      name: name.value,
-      type: type.value,
-      apiKey: apiKey.value,
-      baseURL: baseUrl.value ? normalizeBaseUrl(baseUrl.value) : undefined,
-      model: model.value,
-      enabled: false,
-      createdAt: Date.now(),
-    }
-
-    const result = await testProviderConnection(tempConfig)
-    testConnectionResult.value = result
-  }
-  catch (error) {
-    console.error('Failed to test connection:', error)
-    testConnectionResult.value = {
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to test connection',
-    }
-  }
-  finally {
-    isTestingConnection.value = false
-  }
-}
-
-// 获取推荐模型
-function getRecommendedModelsForType(): string[] {
-  return getRecommendedModels(type.value)
 }
 
 // 保存
@@ -300,32 +255,13 @@ watch(() => props.open, (isOpen) => {
             :models="availableModels"
             :placeholder="$t('ai_config.model_placeholder')"
           />
-          <p v-if="type && getRecommendedModelsForType().length > 0" class="mt-1 text-xs text-muted-foreground">
-            {{ $t('ai_config.recommended_models') }}: {{ getRecommendedModelsForType().join(', ') }}
-          </p>
-        </div>
-
-        <!-- 操作按钮 -->
-        <div class="flex space-x-2">
-          <Button
-            variant="outline"
-            class="flex-1"
-            :disabled="!apiKey || !baseUrl"
-            @click="testConnection"
-          >
-            <div
-              :class="isTestingConnection ? 'i-lucide-loader-2 animate-spin' : 'i-lucide-plug'"
-              class="mr-1"
-            />
-            {{ $t('ai_config.test_connection') }}
-          </Button>
         </div>
 
         <!-- 测试连接结果 -->
         <div v-if="testConnectionResult" class="border rounded p-2 text-xs">
           <div v-if="testConnectionResult.success" class="flex items-center text-green-600">
             <div class="i-lucide-check-circle mr-1" />
-            {{ $t('ai_config.connection_success') }}
+            {{ $t('ai_config.connection_success') }} ({{ testConnectionResult.modelCount }} {{ $t('ai_config.models') }})
           </div>
           <div v-else class="flex items-center text-red-600">
             <div class="i-lucide-x-circle mr-1" />

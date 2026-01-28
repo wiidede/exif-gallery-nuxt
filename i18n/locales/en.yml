@@ -70,8 +70,6 @@ ai_config:
   save: Save
   selected: Selected
   fetch_models: Fetch Models
-  recommended_models: Recommended Models
-  test_connection: Test Connection
   connection_success: Connection successful
   connection_failed: Connection failed
   cancel_edit: Cancel Edit
@@ -79,6 +77,7 @@ ai_config:
   available_models: Available Models
   use_custom_model: 'Use custom model: "{model}"'
   search_to_add_custom_model: Type in search box to add custom model
+  models: models
 file_upload:
   title: Upload file
   description: Drag or drop your files here or click to upload
