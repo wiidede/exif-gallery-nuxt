@@ -75,7 +75,7 @@ This project is designed for deployment on Cloudflare Workers with NuxtHub.
 
 1. **Create D1 Database**
    - Navigate to **Storage & Databases** → **D1 SQL Database** in Cloudflare Dashboard
-   - Create a database and note the **Database ID**
+   - Create a database named `exif-gallery-nuxt` and note the **Database ID**
 
 2. **Create R2 Bucket**
    - Navigate to **Storage & Databases** → **R2 Object Storage**
@@ -90,6 +90,7 @@ Update `wrangler.jsonc` with your Cloudflare resource IDs:
   "d1_databases": [
     {
       "binding": "DB",
+      "database_name": "exif-gallery-nuxt",
       "database_id": "YOUR_DATABASE_ID"
     }
   ],

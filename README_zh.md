@@ -75,7 +75,7 @@ pnpm dev
 
 1. **创建 D1 数据库**
    - 在 Cloudflare Dashboard 中导航到 **存储和数据库** → **D1 SQL 数据库**
-   - 创建数据库并记录 **数据库 ID**
+   - 创建数据库命名为 `exif-gallery-nuxt` 并记录 **数据库 ID**
 
 2. **创建 R2 存储桶**
    - 导航到 **存储和数据库** → **R2 对象存储**
@@ -90,6 +90,7 @@ pnpm dev
   "d1_databases": [
     {
       "binding": "DB",
+      "database_name": "exif-gallery-nuxt",
       "database_id": "YOUR_DATABASE_ID"
     }
   ],

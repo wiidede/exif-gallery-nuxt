@@ -19,6 +19,7 @@
   "d1_databases": [
     {
       "binding": "DB",
+      "database_name": "exif-gallery-nuxt",
       "database_id": "7c2d4751-a7fd-4721-b85a-2302d5418670"
     }
   ]
