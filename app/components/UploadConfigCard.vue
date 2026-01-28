@@ -9,15 +9,14 @@ onClickOutside(cardRef, () => {
 <template>
   <Card
     ref="cardRef"
-    class="group relative overflow-hidden p-4"
+    class="group relative p-4"
     :class="{ 'cursor-pointer': !configuring }"
     @click="configuring = true"
   >
     <ClientOnly>
       <Collapsible v-model:open="configuring">
         <CollapsibleTrigger v-show="!configuring">
-          <div v-if="!configuring" class="flex flex-wrap gap-2">
-            <div class="i-lucide-cog pointer-events-none absolute bottom--4 right--2 text-6xl op-20 group-hover:animate-spin animate-duration-2000!" />
+          <div class="flex flex-wrap gap-2">
             <slot name="status" />
           </div>
         </CollapsibleTrigger>
@@ -28,5 +27,6 @@ onClickOutside(cardRef, () => {
         </CollapsibleContent>
       </Collapsible>
     </ClientOnly>
+    u
   </Card>
 </template>
