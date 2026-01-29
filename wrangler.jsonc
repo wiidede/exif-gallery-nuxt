@@ -20,7 +20,7 @@
     {
       "binding": "DB",
       "database_name": "exif-gallery-nuxt",
-      "database_id": "7c2d4751-a7fd-4721-b85a-2302d5418670",
+      "database_id": "4ac8b55b-58ba-4051-b930-a9e30f78a3ef",
       "migrations_dir": "server/db/migrations/sqlite",
       "migrations_table": "_hub_migrations"
     }
