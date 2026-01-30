@@ -81,7 +81,7 @@ function getPhotoThumbnail(photo: IPhoto) {
           viewport-class="h-inherit"
           :class="cn(
             'lt-md:translate-x-full md:shadow-none',
-            { 'lt-md:translate-x-0 lt-md:shadow-lg shadow-black': isDrawerOpen },
+            { 'lt-md:translate-x-0 lt-md:shadow-lg lt-md:border border-input': isDrawerOpen },
           )"
         >
           <Tags />

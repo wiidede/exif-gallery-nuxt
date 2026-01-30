@@ -269,7 +269,7 @@ watch(() => props.open, (isOpen) => {
           </div>
         </div>
       </div>
-      <DialogFooter>
+      <DialogFooter class="gap-y-2">
         <Button variant="outline" @click="handleCancel">
           {{ $t('ai_config.cancel') }}
         </Button>

@@ -134,7 +134,7 @@ pnpm dev
    - **Build command**: `pnpm run build`
    - **Deploy command**: `npx wrangler deploy`
 4. 添加环境变量：
-   - `NUXT_SESSION_PASSWORD` - 生成一个安全的随机字符串
+   - `NUXT_SESSION_PASSWORD` - 生成一个安全的随机字符串（至少 32 位）
    - `NUXT_ADMIN_PASSWORD` - 设置您的管理后台密码
 5. 点击 **Deploy**
 
@@ -190,9 +190,9 @@ pnpm dev --remote
 | 变量 | 必需 | 默认值 | 描述 |
 |------|------|--------|------|
 | `NUXT_ADMIN_PASSWORD` | 是 | `admin` | 管理后台访问密码 |
-| `NUXT_SESSION_PASSWORD` | 是 | 自动生成 | 会话加密密钥 |
+| `NUXT_SESSION_PASSWORD` | 是 | 自动生成 | 会话加密密钥（至少32位） |
 | `NUXT_PUBLIC_TITLE` | 否 | `Exif Gallery Nuxt` | 应用标题 |
-| `NUXT_PUBLIC_DESCRIPTION` | 否 | 见默认值 | 应用描述 |
+| `NUXT_PUBLIC_DESCRIPTION` | 否 | 一个集成了 AI 智能处理、浏览器图片压缩等功能的全栈相册解决方案 | 应用描述 |
 
 ## 📁 项目结构
 

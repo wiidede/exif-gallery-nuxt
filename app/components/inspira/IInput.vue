@@ -33,7 +33,7 @@ const containerBg = computed(() => {
   return `
         radial-gradient(
           ${visible.value ? `${radius}px` : '0px'} circle at ${mouse.value.x}px ${mouse.value.y}px,
-          hsl(var(--primary)),
+          oklch(var(--primary)),
           transparent 80%
         )
       `

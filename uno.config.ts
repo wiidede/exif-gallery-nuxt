@@ -21,13 +21,10 @@ export default defineConfig({
   ],
   preflights: [{
     getCSS: () => `
-*, ::before, ::after { --un-default-border-color: hsl(var(--border)); }
+*, ::before, ::after { --un-default-border-color: oklch(var(--border)); }
 .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 `,
   }],
-  shortcuts: {
-    'border-grid': 'border-border/30 dark:border-border border-dashed',
-  },
   // By default, `.ts` and `.js` files are NOT extracted.
   // If you want to extract them, use the following configuration.
   // It's necessary to add the following configuration if you use shadcn-vue or shadcn-svelte.

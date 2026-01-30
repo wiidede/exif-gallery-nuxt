@@ -52,9 +52,7 @@ const languageValues = [
                 : ''
             "
             :style="{
-              '--theme-primary': `hsl(${
-                color?.activeColor[isDark ? 'dark' : 'light']
-              })`,
+              '--theme-primary': `oklch(${isDark ? color.primaryDark : color.primary})`,
             }"
             @click="theme = color.name"
           >

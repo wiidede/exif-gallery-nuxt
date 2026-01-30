@@ -41,8 +41,8 @@ function openEditDialog(photo: IPhoto) {
           {{ $t('go_to_upload') }}
         </span>
         <BorderBeam
-          color-from="hsl(var(--primary))"
-          color-to="hsl(var(--primary-foreground))"
+          color-from="oklch(var(--primary))"
+          color-to="oklch(var(--primary-foreground))"
           :duration="2"
           :border-width="4"
         />

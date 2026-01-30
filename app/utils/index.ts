@@ -55,6 +55,10 @@ export function formatCameraText(p: IPhotoForm) {
   return [make, model].filter(Boolean).join(' ') || '--'
 }
 
+export function formatLensText(p: IPhotoForm) {
+  return p.lensModel || '--'
+}
+
 export async function getCompressedImageBase64(file: File, compress: boolean): Promise<string> {
   if (compress) {
     file = await compressImage(file, {

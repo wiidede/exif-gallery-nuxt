@@ -38,14 +38,11 @@ function handleSaveProvider(providerData: Omit<AIProviderConfig, 'id' | 'created
   editingProvider.value = null
 }
 
-// 切换供应商状态
-function toggleProviderEnabled(provider: AIProviderConfig) {
-  updateProvider(provider.id, { enabled: !provider.enabled })
-}
-
 // 选择供应商
 function selectProvider(providerId: string) {
   setSelectedProvider(providerId)
+  // 选中供应商时自动启用该供应商
+  updateProvider(providerId, { enabled: true })
 }
 </script>
 
@@ -169,18 +166,23 @@ function selectProvider(providerId: string) {
                   <div
                     v-for="provider in Object.values(aiConfig.providers)"
                     :key="provider.id"
-                    class="flex items-center justify-between border rounded-lg p-2 transition-colors hover:bg-muted/50"
+                    class="group flex cursor-pointer items-center justify-between gap-2 border rounded-lg p-2 transition-colors hover:bg-muted/50"
                     :class="{ 'border-primary bg-primary/5': aiConfig.selectedProviderId === provider.id }"
+                    @click="selectProvider(provider.id)"
                   >
-                    <div class="min-w-0 flex flex-1 items-center space-x-2">
-                      <Checkbox
-                        :model-value="provider.enabled"
-                        @update:model-value="toggleProviderEnabled(provider)"
-                      />
+                    <div class="min-w-0 flex flex-1 items-center gap-2">
+                      <!-- shadcn 风格的 radio 样式 -->
                       <div
-                        class="min-w-0 flex-1 cursor-pointer"
-                        @click="selectProvider(provider.id)"
+                        class="relative h-4 w-4 flex shrink-0 items-center justify-center border border-primary rounded-full text-primary ring-offset-background transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring"
                       >
+                        <div
+                          v-if="aiConfig.selectedProviderId === provider.id"
+                          class="flex items-center justify-center"
+                        >
+                          <div class="h-2 w-2 rounded-full bg-primary" />
+                        </div>
+                      </div>
+                      <div class="min-w-0 flex-1">
                         <div class="truncate text-sm font-medium">
                           {{ provider.name }}
                         </div>
@@ -197,7 +199,7 @@ function selectProvider(providerId: string) {
                         {{ $t('ai_config.selected') }}
                       </Badge>
                     </div>
-                    <div class="flex items-center space-x-1">
+                    <div class="flex items-center gap-1" @click.stop>
                       <TooltipIconButton
                         icon="i-lucide-pencil"
                         :label="$t('ai_config.edit')"

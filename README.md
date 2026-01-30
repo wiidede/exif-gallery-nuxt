@@ -133,7 +133,7 @@ The project includes a `.github/workflows/migrate.yml` file. You can:
    - **Build command**: `pnpm run build`
    - **Deploy command**: `npx wrangler deploy`
 4. Add environment variables:
-   - `NUXT_SESSION_PASSWORD` - Generate a secure random string
+   - `NUXT_SESSION_PASSWORD` - Generate a secure random string (at least 32 characters)
    - `NUXT_ADMIN_PASSWORD` - Set your admin panel password
 5. Click **Deploy**
 
@@ -189,9 +189,9 @@ For users who previously deployed using NuxtHub Admin:
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `NUXT_ADMIN_PASSWORD` | Yes | `admin` | Admin panel access password |
-| `NUXT_SESSION_PASSWORD` | Yes | Auto-generated | Session encryption key |
+| `NUXT_SESSION_PASSWORD` | Yes | -- | Session encryption key(at least 32 characters) |
 | `NUXT_PUBLIC_TITLE` | No | `Exif Gallery Nuxt` | Application title |
-| `NUXT_PUBLIC_DESCRIPTION` | No | See default | Application description |
+| `NUXT_PUBLIC_DESCRIPTION` | No | `A full-stack photo album solution that integrates AI intelligent processing, browser image compression, and other functions` | Application description |
 
 ## 📁 Project Structure
 

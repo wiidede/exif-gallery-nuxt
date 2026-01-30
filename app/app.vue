@@ -2,7 +2,7 @@
 const { theme } = useTheme(true)
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')
-const themeColor = computed(() => baseColors.find(c => c.name === theme.value)?.activeColor[isDark.value ? 'dark' : 'light'] || theme.value)
+const themeColor = computed(() => baseColors.find(c => c.name === theme.value)?.[isDark.value ? 'primaryDark' : 'primary'] || theme.value)
 
 onPrehydrate(() => {
   const value = localStorage.getItem('shadcn-theme')
@@ -47,7 +47,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <NuxtLoadingIndicator color="hsl(var(--primary))" />
+  <NuxtLoadingIndicator color="oklch(var(--primary))" />
   <div class="relative min-h-[100dvh]">
     <Sonner :visible-toasts="20" position="top-right" />
     <TooltipProvider :delay-duration="0" disable-closing-trigger>

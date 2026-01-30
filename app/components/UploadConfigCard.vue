@@ -27,5 +27,8 @@ onClickOutside(cardRef, () => {
         </CollapsibleContent>
       </Collapsible>
     </ClientOnly>
+    <div class="pointer-events-none absolute left-0 top-0 h-full w-full overflow-hidden">
+      <div v-show="!configuring" class="i-lucide-cog absolute bottom--4 right--2 text-6xl op-20 group-hover:animate-spin animate-duration-2000!" />
+    </div>
   </Card>
 </template>
