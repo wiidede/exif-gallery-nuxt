@@ -27,7 +27,9 @@ export function usePhotoSort() {
 
   function setSort(newOrderBy: OrderByType, newOrder?: OrderType) {
     orderBy.value = newOrderBy
-    order.value = newOrder ?? (order.value === 'desc' ? 'asc' : 'desc')
+    if (newOrder !== undefined) {
+      order.value = newOrder
+    }
   }
 
   function getSortLabel(orderByValue: OrderByType): string {
