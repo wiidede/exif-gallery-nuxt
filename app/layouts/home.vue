@@ -2,7 +2,7 @@
 const localePath = useLocalePath()
 const { t } = useI18n()
 
-const links = [
+const links = computed(() => [
   {
     icon: 'i-lucide-gallery-vertical',
     to: localePath('/'),
@@ -13,7 +13,7 @@ const links = [
     to: localePath('/grid'),
     tooltip: t('header.grid_view'),
   },
-]
+])
 </script>
 
 <template>
