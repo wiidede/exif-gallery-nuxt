@@ -85,30 +85,16 @@ function getPhotoThumbnail(photo: IPhoto) {
         </template>
       </div>
       <div class="flex-shrink-0 h-min right-4 top-29 fixed md:top-16 md:sticky lt-md:z-40">
-        <ScrollArea
-          class="rounded-lg bg-background flex max-h-[calc(100vh-8.25rem)] transition-transform duration-300 ease-in-out lt-md:p-4 md:max-h-[calc(100vh-5rem)]"
-          viewport-class="h-inherit"
+        <ScrollAreaDynamic
+          class="rounded-md bg-card flex max-h-[calc(100dvh-8.25rem)] transition-transform duration-300 ease-in-out lt-md:p-4 md:bg-background md:max-h-[calc(100dvh-5rem)]"
           :class="cn(
-            'lt-md:translate-x-full md:shadow-none',
+            'lt-md:translate-x-[calc(100%_+_4rem)] md:shadow-none',
             { 'lt-md:translate-x-0 lt-md:shadow-lg lt-md:border border-input': isDrawerOpen },
           )"
         >
           <Tags />
-        </ScrollArea>
+        </ScrollAreaDynamic>
       </div>
-      <!-- <div class="fixed right-0 top-16 z-40 h-min md:sticky md:flex-shrink-0">
-        <div
-          :class="cn(
-            'h-screen w-280px translate-x-full transform bg-background transition-transform duration-300 ease-in-out',
-            'md:h-auto md:w-auto md:transform-none lt-md:p-4 md:shadow-none',
-            { 'translate-x-0 shadow-lg': isDrawerOpen },
-          )"
-        >
-          <ScrollArea class="max-h-[calc(100vh-5rem)] flex" viewport-class="h-inherit">
-            <Tags />
-          </ScrollArea>
-        </div>
-      </div> -->
     </div>
     <div v-if="!loading && !photos?.length" class="m-auto p4 flex flex-col gap4 h-66vh items-center justify-center">
       <h2>{{ $t('no_photos') }}</h2>
