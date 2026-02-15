@@ -42,11 +42,12 @@ setupNavigation()
   <section class="p-4 relative">
     <div class="flex flex-col gap-4 xl:px-20">
       <PhotoItem
-        v-for="photo in photos"
+        v-for="(photo, index) in photos"
         :key="photo.id"
         :photo="photo"
         :logged-in="loggedIn"
         :image-class="{ 'current-image': currentPhoto === photo.id }"
+        :priority="index === 0"
         editable
         @deleted="photos = photos.filter(p => p.id !== $event)"
       >

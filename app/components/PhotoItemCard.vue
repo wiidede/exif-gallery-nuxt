@@ -12,6 +12,7 @@ const {
   translateZ?: number
   mini?: boolean
   fullscreen?: boolean
+  priority?: boolean
 }>()
 
 const { disable3DCard } = useTheme()
@@ -19,12 +20,12 @@ const { disable3DCard } = useTheme()
 
 <template>
   <slot v-if="disable3DCard || fullscreen">
-    <PhotoItemCardDefault :photo="photo" :image-class="imageClass" :mini="mini" :fullscreen="fullscreen" :class="cn({ 'h-full': mini && !fullscreen }, className)" />
+    <PhotoItemCardDefault :photo="photo" :image-class="imageClass" :mini="mini" :fullscreen="fullscreen" :priority="priority" :class="cn({ 'h-full': mini && !fullscreen }, className)" />
   </slot>
   <ThreeDCardContainer v-else :container-class="cn('z-48 hover:z-49', { 'h-full': mini && !fullscreen }, className)" :class="mini && !fullscreen ? 'h-full' : ''">
     <ThreeDCardItem :translate-z="translateZ" :class="mini && !fullscreen ? 'h-full' : ''">
       <slot>
-        <PhotoItemCardDefault :photo="photo" :image-class="imageClass" :mini="mini" :fullscreen="fullscreen" />
+        <PhotoItemCardDefault :photo="photo" :image-class="imageClass" :mini="mini" :fullscreen="fullscreen" :priority="priority" />
       </slot>
     </ThreeDCardItem>
   </ThreeDCardContainer>

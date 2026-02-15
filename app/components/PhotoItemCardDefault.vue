@@ -7,6 +7,7 @@ defineProps<{
   imageClass?: HTMLAttributes['class']
   mini?: boolean
   fullscreen?: boolean
+  priority?: boolean
 }>()
 </script>
 
@@ -24,6 +25,7 @@ defineProps<{
       <img
         :src="`/photos/${photo.jpeg || photo.webp || photo.avif}`"
         :class="cn('h-full m-auto object-contain', fullscreen ? 'rounded-none' : 'rounded-lg', imageClass)"
+        :fetchpriority="priority ? 'high' : undefined"
       >
     </picture>
   </div>

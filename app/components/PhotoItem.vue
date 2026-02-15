@@ -12,6 +12,7 @@ const {
   editable?: boolean
   fullscreen?: boolean
   idle?: boolean
+  priority?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -53,13 +54,14 @@ function deletePhoto(id: string) {
 <template>
   <div :class="[fullscreen ? 'h-dvh w-dvw' : 'flex gap-1 lt-md:flex-col lg:gap-8 md:gap-4']">
     <div v-if="isMini" class="relative md:flex-[2] xl:flex-[3]">
-      <PhotoItemCard class="h-full w-full inset-0 absolute" :photo="photo" :image-class="imageClass" mini />
+      <PhotoItemCard class="h-full w-full inset-0 absolute" :photo="photo" :image-class="imageClass" :priority="priority" mini />
     </div>
     <PhotoItemCard
       v-else
       :photo="photo"
       :image-class="imageClass"
       :fullscreen="fullscreen"
+      :priority="priority"
       :class="fullscreen ? 'flex-1' : 'md:flex-[2] xl:flex-[3]'"
     />
     <!-- info outer -->
