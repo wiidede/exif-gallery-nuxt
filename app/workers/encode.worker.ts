@@ -19,21 +19,45 @@ globalThis.onmessage = async (e) => {
 
   try {
     let result: File | undefined
+    let dataToEncode = imageData
+
+    // 自动缩放：短边 >= 2880 时缩放到短边 2160
+    if (options.target !== 'thumbnail' && options.autoResize) {
+      const minDimension = Math.min(imageData.width, imageData.height)
+      if (minDimension >= 2880) {
+        let targetWidth: number | undefined
+        let targetHeight: number | undefined
+
+        if (imageData.width > imageData.height) {
+          targetHeight = 2160
+          targetWidth = Math.round(2160 * imageData.width / imageData.height)
+        }
+        else {
+          targetWidth = 2160
+          targetHeight = Math.round(2160 * imageData.height / imageData.width)
+        }
+
+        dataToEncode = await resize(imageData, {
+          width: targetWidth,
+          height: targetHeight,
+        })
+      }
+    }
 
     if (options.target === 'jpeg') {
-      const jpegData = await encodeJpeg(imageData, options.encodeOptions)
+      const jpegData = await encodeJpeg(dataToEncode, options.encodeOptions)
       result = new File([jpegData], changeFileExtension(filename, 'jpg'), {
         type: 'image/jpeg',
       })
     }
     else if (options.target === 'webp') {
-      const webpData = await encodeWebp(imageData, options.encodeOptions)
+      const webpData = await encodeWebp(dataToEncode, options.encodeOptions)
       result = new File([webpData], changeFileExtension(filename, 'webp'), {
         type: 'image/webp',
       })
     }
     else if (options.target === 'avif') {
-      const avifData = options.encodeOptions ? await encodeAvif(imageData, options.encodeOptions) : await encodeAvif(imageData)
+      const avifData = options.encodeOptions ? await encodeAvif(dataToEncode, options.encodeOptions) : await encodeAvif(dataToEncode)
       result = new File([avifData], changeFileExtension(filename, 'avif'), {
         type: 'image/avif',
       })

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CompressMultiResultOption } from '~/utils/compress'
 import pLimit from 'p-limit'
 
 interface FileEntry {
@@ -127,16 +128,37 @@ async function processFileExif(fileEntry: FileEntry) {
 
 async function processFileCompress(fileEntry: FileEntry) {
   const fileType = fileEntry.file.type
-  const formatsConfig = { ...toRaw(uploadConfig.value).formats }
-  if (fileType === 'webp') {
-    formatsConfig.jpeg = false
-    formatsConfig.webp = false
+  const baseFormats = toRaw(uploadConfig.value).formats
+
+  const formatsConfig: CompressMultiResultOption = {}
+  const formatKeys = ['jpeg', 'webp', 'avif', 'thumbnail'] as const
+  const autoResize = uploadConfig.value.enableAutoResize
+
+  for (const key of formatKeys) {
+    const enabled = baseFormats[key]
+    if (!enabled)
+      continue
+    if (fileType === 'image/webp' && (key === 'jpeg' || key === 'webp'))
+      continue
+    if (fileType === 'image/avif' && (key === 'jpeg' || key === 'webp' || key === 'avif'))
+      continue
+
+    switch (key) {
+      case 'jpeg':
+        formatsConfig.jpeg = { target: 'jpeg', autoResize }
+        break
+      case 'webp':
+        formatsConfig.webp = { target: 'webp', autoResize }
+        break
+      case 'avif':
+        formatsConfig.avif = { target: 'avif', autoResize }
+        break
+      case 'thumbnail':
+        formatsConfig.thumbnail = { target: 'thumbnail' }
+        break
+    }
   }
-  if (fileType === 'avif') {
-    formatsConfig.jpeg = false
-    formatsConfig.webp = false
-    formatsConfig.avif = false
-  }
+
   fileEntry.compressedFile = Object.fromEntries(Object.entries(formatsConfig).map(
     ([type, value]) => [type, value ? 'loading' : undefined],
   ))

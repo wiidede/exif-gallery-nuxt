@@ -59,6 +59,7 @@ function selectProvider(providerId: string) {
           <ItemStatus :label="$t('compression_config.webp')" :checked="uploadConfig.formats.webp" />
           <ItemStatus :label="$t('compression_config.avif')" :checked="uploadConfig.formats.avif" />
         </Card>
+        <ItemStatus :label="$t('compression_config.auto_resize')" :checked="uploadConfig.enableAutoResize" />
         <ItemStatus :label="$t('compression_config.thumbnail')" :checked="uploadConfig.formats.thumbnail" />
       </template>
       <template #config>
@@ -115,6 +116,21 @@ function selectProvider(providerId: string) {
             </div>
           </CollapsibleContent>
         </Collapsible>
+        <div class="flex gap-2 items-center">
+          <Checkbox
+            id="enable-auto-resize"
+            v-model="uploadConfig.enableAutoResize"
+          />
+          <Label for="enable-auto-resize">{{ $t('compression_config.auto_resize') }}</Label>
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <div class="i-lucide-info cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{{ $t('compression_config.auto_resize_info') }}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
         <div class="flex gap-2 items-center">
           <Checkbox
             id="formats-thumbnail"

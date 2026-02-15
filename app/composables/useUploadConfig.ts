@@ -9,12 +9,14 @@ export interface compressFormat {
 
 export interface UploadConfig {
   enableCompression: boolean
+  enableAutoResize: boolean
   formats: compressFormat
 }
 
 export function useUploadConfig() {
   const config = useLocalStorage<UploadConfig>('upload-config', {
     enableCompression: true,
+    enableAutoResize: true,
     formats: {
       jpeg: false,
       webp: true,

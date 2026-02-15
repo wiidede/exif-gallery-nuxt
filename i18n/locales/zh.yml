@@ -47,7 +47,9 @@ login_form:
 compression_config:
   title: 图片压缩
   enable: 启用图片压缩
-  info: 图片压缩可以加快页面加载速度，但会略微降低图片质量，并且exif也会被移除
+  info: 图片压缩可以加快页面加载速度，但会略微降低图片质量，并且文件的exif也会被移除
+  auto_resize: 自动缩放
+  auto_resize_info: 当图片短边大于等于2880像素时，自动缩放到短边2160像素
   formats: 压缩格式
   jpeg: JPEG
   webp: WebP

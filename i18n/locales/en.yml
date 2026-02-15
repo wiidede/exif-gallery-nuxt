@@ -47,7 +47,9 @@ login_form:
 compression_config:
   title: Image Compression
   enable: Enable image compression
-  info: Image compression can speed up page loading, but will slightly reduce image quality, and exif will be removed
+  info: Image compression can speed up page loading, but will slightly reduce image quality, and file's exif will be removed
+  auto_resize: Auto Resize
+  auto_resize_info: Automatically resize images to 2160px on the short edge when it's 2880px or larger
   formats: Compression formats
   jpeg: JPEG
   webp: WebP

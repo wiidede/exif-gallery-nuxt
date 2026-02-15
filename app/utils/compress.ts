@@ -6,11 +6,13 @@ import type { EncodeOptions as WebpOption } from '@jsquash/webp/meta'
 interface Jpeg {
   target: 'jpeg'
   encodeOptions?: Partial<JpegOption>
+  autoResize?: boolean
 }
 
 interface Webp {
   target: 'webp'
   encodeOptions?: Partial<WebpOption>
+  autoResize?: boolean
 }
 
 interface Avif {
@@ -18,6 +20,7 @@ interface Avif {
   encodeOptions?: Partial<AvifOption> & {
     bitDepth?: 8
   }
+  autoResize?: boolean
 }
 
 interface Thumbnail {
