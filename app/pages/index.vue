@@ -8,7 +8,7 @@ const currentPhoto = useState<string>('currentPhoto', () => ref(''))
 const { loggedIn } = useUserSession()
 const { orderBy, order } = usePhotoSort()
 
-const LIMIT = 12
+const LIMIT = 6
 const params = computed(() => ({
   hidden: false,
   orderBy: orderBy.value,
